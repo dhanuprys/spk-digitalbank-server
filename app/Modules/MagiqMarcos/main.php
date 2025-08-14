@@ -1,0 +1,83 @@
+<?php
+
+require_once './ObjectEntity.php';
+require_once './object_loader.php';
+require_once './UserCriteria.php';
+require_once './MagiqMarcos.php';
+
+$objects = load_objects();
+$criteria = new UserCriteria(
+    l2_cg1_a_value: 87,
+    l2_cg1_a_max: false,
+    l2_cg1_b_value: 60,
+    l2_cg1_b_max: true,
+    l2_cg1_c_value: 40,
+    l2_cg1_c_max: true,
+    l2_cg1_d_value: 70,
+    l2_cg1_d_max: true,
+    l2_cg1_e_value: 40,
+    l2_cg1_e_max: true,
+    l2_cg2_a_value: 74,
+    l2_cg2_a_max: true,
+    l2_cg2_b_value: 100,
+    l2_cg2_b_max: true,
+    l2_cg2_c_value: 55,
+    l2_cg2_c_max: true,
+    l2_cg2_d_value: 56,
+    l2_cg2_d_max: true,
+    l2_cg3_a_value: 85,
+    l2_cg3_a_max: true,
+    l2_cg3_b_value: 70,
+    l2_cg3_b_max: true,
+    l2_cg3_c_value: 78,
+    l2_cg3_c_max: true,
+    l2_cg3_d_value: 73,
+    l2_cg3_d_max: true,
+    l2_cg3_e_value: 68,
+    l2_cg3_e_max: true,
+    l1_cg1_a_value: 1,
+    l1_cg1_a_max: true,
+    l1_cg1_b_value: 15,
+    l1_cg1_b_max: true,
+    l1_cg1_c_value: 80,
+    l1_cg1_c_max: true,
+);
+// $criteria = new UserCriteria(
+//     l2_cg1_a_value: 0.456666667,
+//     l2_cg1_a_max: false,
+//     l2_cg1_b_value: 0.256666667,
+//     l2_cg1_b_max: true,
+//     l2_cg1_c_value: 0.156666667,
+//     l2_cg1_c_max: true,
+//     l2_cg1_d_value: 0.09,
+//     l2_cg1_d_max: true,
+//     l2_cg1_e_value: 0.04,
+//     l2_cg1_e_max: true,
+//     l2_cg2_a_value: 0.520833333,
+//     l2_cg2_a_max: true,
+//     l2_cg2_b_value: 0.270833333,
+//     l2_cg2_b_max: true,
+//     l2_cg2_c_value: 0.145833333,
+//     l2_cg2_c_max: true,
+//     l2_cg2_d_value: 0.0625,
+//     l2_cg2_d_max: true,
+//     l2_cg3_a_value: 0.456666667,
+//     l2_cg3_a_max: true,
+//     l2_cg3_b_value: 0.256666667,
+//     l2_cg3_b_max: true,
+//     l2_cg3_c_value: 0.156666667,
+//     l2_cg3_c_max: true,
+//     l2_cg3_d_value: 0.09,
+//     l2_cg3_d_max: true,
+//     l2_cg3_e_value: 0.04,
+//     l2_cg3_e_max: true,
+//     l1_cg1_a_value: 0.611111111,
+//     l1_cg1_a_max: true,
+//     l1_cg1_b_value: 0.277777778,
+//     l1_cg1_b_max: true,
+//     l1_cg1_c_value: 0.111111111,
+//     l1_cg1_c_max: true,
+// );
+
+$marcos = new MagiqMarcos($objects);
+print_r($marcos->calculate($criteria)[0]);

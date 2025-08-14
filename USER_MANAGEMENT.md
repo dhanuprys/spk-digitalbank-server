@@ -1,8 +1,8 @@
-# User Management - NITISARA Film Festival
+# User Management - DigitalBank Film Festival
 
 ## Overview
 
-User accounts for the NITISARA Film Festival admin panel are now managed through Laravel Console commands instead of a public registration system. This provides better security and control over who can access the admin panel.
+User accounts for the DigitalBank Film Festival admin panel are now managed through Laravel Console commands instead of a public registration system. This provides better security and control over who can access the admin panel.
 
 ## Creating User Accounts
 
@@ -21,7 +21,7 @@ This will prompt you for:
 ### Non-Interactive Mode
 
 ```bash
-php artisan user:create --name="Admin Name" --email="admin@nitisara.com" --password="securepassword123"
+php artisan user:create --name="Admin Name" --email="admin@digitalbank.com" --password="securepassword123"
 ```
 
 ## Command Features
@@ -37,21 +37,21 @@ php artisan user:create --name="Admin Name" --email="admin@nitisara.com" --passw
 ```bash
 # Interactive mode
 $ php artisan user:create
-🎬 NITISARA Film Festival - User Creation
+🎬 DigitalBank Film Festival - User Creation
 ==========================================
-Masukkan nama lengkap: Admin Nitisara
-Masukkan alamat email: admin@nitisara.com
+Masukkan nama lengkap: Admin DigitalBank
+Masukkan alamat email: admin@digitalbank.com
 Masukkan kata sandi: ********
 ✅ User berhasil dibuat!
-📧 Email: admin@nitisara.com
-👤 Nama: Admin Nitisara
+📧 Email: admin@digitalbank.com
+👤 Nama: Admin DigitalBank
 🆔 ID: 1
 🎉 User dapat login ke panel admin sekarang!
 
 # Non-interactive mode
-$ php artisan user:create --name="John Doe" --email="john@nitisara.com" --password="mypassword123"
+$ php artisan user:create --name="John Doe" --email="john@digitalbank.com" --password="mypassword123"
 ✅ User berhasil dibuat!
-📧 Email: john@nitisara.com
+📧 Email: john@digitalbank.com
 👤 Nama: John Doe
 🆔 ID: 2
 🎉 User dapat login ke panel admin sekarang!
