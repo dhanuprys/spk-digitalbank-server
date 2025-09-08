@@ -37,24 +37,24 @@ class ObjectMetric extends Model
 
     protected $casts = [
         // Level 2 Criteria Group 1
-        'l2_cg1_a' => 'integer',
-        'l2_cg1_b' => 'integer',
-        'l2_cg1_c' => 'integer',
-        'l2_cg1_d' => 'integer',
-        'l2_cg1_e' => 'integer',
+        'l2_cg1_a' => 'decimal:4',
+        'l2_cg1_b' => 'decimal:4',
+        'l2_cg1_c' => 'decimal:4',
+        'l2_cg1_d' => 'decimal:4',
+        'l2_cg1_e' => 'decimal:4',
 
         // Level 2 Criteria Group 2
-        'l2_cg2_a' => 'integer',
-        'l2_cg2_b' => 'integer',
-        'l2_cg2_c' => 'integer',
-        'l2_cg2_d' => 'integer',
+        'l2_cg2_a' => 'decimal:4',
+        'l2_cg2_b' => 'decimal:4',
+        'l2_cg2_c' => 'decimal:4',
+        'l2_cg2_d' => 'decimal:4',
 
         // Level 2 Criteria Group 3
-        'l2_cg3_a' => 'integer',
-        'l2_cg3_b' => 'integer',
-        'l2_cg3_c' => 'integer',
-        'l2_cg3_d' => 'integer',
-        'l2_cg3_e' => 'integer',
+        'l2_cg3_a' => 'decimal:4',
+        'l2_cg3_b' => 'decimal:4',
+        'l2_cg3_c' => 'decimal:4',
+        'l2_cg3_d' => 'decimal:4',
+        'l2_cg3_e' => 'decimal:4',
     ];
 
     /**
