@@ -7,6 +7,7 @@ use App\Modules\MagiqMarcos\MagiqMarcos;
 use App\Modules\MagiqMarcos\ObjectEntity;
 use App\Services\FileUploadService;
 use App\Services\UserService;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
