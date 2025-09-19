@@ -37,8 +37,23 @@ export default function Create() {
         post(route('admin.object-metrics.store'));
     };
 
-    const handleInputChange = (field: string, value: string) => {
-        setData(field, value === '' ? '0' : value);
+    const handleInputChange = (field: keyof ObjectMetricForm, value: string) => {
+        // Validate decimal input
+        if (value === '') {
+            setData(field, '0');
+            return;
+        }
+
+        // Check if value is a valid decimal with max 9 digits before decimal and 4 after
+        const decimalRegex = /^\d{1,9}(\.\d{1,4})?$/;
+        if (decimalRegex.test(value)) {
+            const numValue = parseFloat(value);
+            if (numValue >= 0 && numValue <= 999999999.9999) {
+                setData(field, value);
+            }
+        } else if (value === '0' || value === '0.') {
+            setData(field, value);
+        }
     };
 
     return (
@@ -99,16 +114,17 @@ export default function Create() {
                                         <Label htmlFor={field}>{label}</Label>
                                         <Input
                                             id={field}
-                                            type="number"
+                                            type="text"
                                             value={data[field as keyof ObjectMetricForm] || ''}
-                                            onChange={(e) => handleInputChange(field, e.target.value)}
-                                            placeholder="0"
-                                            min="0"
-                                            className={errors[field as keyof typeof errors] ? 'border-red-500' : ''}
+                                            onChange={(e) => handleInputChange(field as keyof ObjectMetricForm, e.target.value)}
+                                            placeholder="0.0000"
+                                            pattern="^\d{1,9}(\.\d{1,4})?$"
+                                            title="Masukkan angka dengan maksimal 9 digit sebelum koma dan 4 digit setelah koma (contoh: 123456789.1234)"
+                                            className={errors[field as keyof ObjectMetricForm] ? 'border-red-500' : ''}
                                         />
-                                        {errors[field as keyof typeof errors] && (
+                                        {errors[field as keyof ObjectMetricForm] && (
                                             <p className="text-sm text-red-500">
-                                                {errors[field as keyof typeof errors]}
+                                                {errors[field as keyof ObjectMetricForm]}
                                             </p>
                                         )}
                                     </div>
@@ -134,16 +150,17 @@ export default function Create() {
                                         <Label htmlFor={field}>{label}</Label>
                                         <Input
                                             id={field}
-                                            type="number"
+                                            type="text"
                                             value={data[field as keyof ObjectMetricForm] || ''}
-                                            onChange={(e) => handleInputChange(field, e.target.value)}
-                                            placeholder="0"
-                                            min="0"
-                                            className={errors[field as keyof typeof errors] ? 'border-red-500' : ''}
+                                            onChange={(e) => handleInputChange(field as keyof ObjectMetricForm, e.target.value)}
+                                            placeholder="0.0000"
+                                            pattern="^\d{1,9}(\.\d{1,4})?$"
+                                            title="Masukkan angka dengan maksimal 9 digit sebelum koma dan 4 digit setelah koma (contoh: 123456789.1234)"
+                                            className={errors[field as keyof ObjectMetricForm] ? 'border-red-500' : ''}
                                         />
-                                        {errors[field as keyof typeof errors] && (
+                                        {errors[field as keyof ObjectMetricForm] && (
                                             <p className="text-sm text-red-500">
-                                                {errors[field as keyof typeof errors]}
+                                                {errors[field as keyof ObjectMetricForm]}
                                             </p>
                                         )}
                                     </div>
@@ -170,16 +187,17 @@ export default function Create() {
                                         <Label htmlFor={field}>{label}</Label>
                                         <Input
                                             id={field}
-                                            type="number"
+                                            type="text"
                                             value={data[field as keyof ObjectMetricForm] || ''}
-                                            onChange={(e) => handleInputChange(field, e.target.value)}
-                                            placeholder="0"
-                                            min="0"
-                                            className={errors[field as keyof typeof errors] ? 'border-red-500' : ''}
+                                            onChange={(e) => handleInputChange(field as keyof ObjectMetricForm, e.target.value)}
+                                            placeholder="0.0000"
+                                            pattern="^\d{1,9}(\.\d{1,4})?$"
+                                            title="Masukkan angka dengan maksimal 9 digit sebelum koma dan 4 digit setelah koma (contoh: 123456789.1234)"
+                                            className={errors[field as keyof ObjectMetricForm] ? 'border-red-500' : ''}
                                         />
-                                        {errors[field as keyof typeof errors] && (
+                                        {errors[field as keyof ObjectMetricForm] && (
                                             <p className="text-sm text-red-500">
-                                                {errors[field as keyof typeof errors]}
+                                                {errors[field as keyof ObjectMetricForm]}
                                             </p>
                                         )}
                                     </div>

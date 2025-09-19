@@ -62,9 +62,10 @@ interface Props {
     filters: {
         search?: string;
     };
+    import_errors?: string[];
 }
 
-export default function Index({ objectMetrics, filters }: Props) {
+export default function Index({ objectMetrics, filters, import_errors }: Props) {
     const [selectedIds, setSelectedIds] = useState<number[]>([]);
     const [importDialogOpen, setImportDialogOpen] = useState(false);
     const [deleteDialogOpen, setDeleteDialogOpen] = useState<number | null>(null);
@@ -148,11 +149,6 @@ export default function Index({ objectMetrics, filters }: Props) {
         );
     };
 
-    const handleExport = () => {
-        router.get(route('admin.object-metrics.export'), data, {
-            preserveState: true,
-        });
-    };
 
     const handleImport = () => {
         if (!data.csv_file) return;
@@ -184,6 +180,22 @@ export default function Index({ objectMetrics, filters }: Props) {
             <Head title="Metrik Penilaian" />
 
             <div className="space-y-6">
+                {/* Import Errors Display */}
+                {import_errors && import_errors.length > 0 && (
+                    <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+                        <h3 className="text-sm font-medium text-red-800 mb-2">
+                            Terdapat {import_errors.length} kesalahan dalam import:
+                        </h3>
+                        <div className="space-y-1">
+                            {import_errors.map((error, index) => (
+                                <p key={index} className="text-sm text-red-700">
+                                    • {error}
+                                </p>
+                            ))}
+                        </div>
+                    </div>
+                )}
+
                 {/* Header */}
                 <div className="flex items-center justify-between">
                     <div>
@@ -207,17 +219,56 @@ export default function Index({ objectMetrics, filters }: Props) {
                                     </DialogDescription>
                                 </DialogHeader>
                                 <div className="space-y-4">
+                                    <div className="flex items-center justify-between">
+                                        <div>
+                                            <p className="text-sm font-medium">Download Template</p>
+                                            <p className="text-xs text-muted-foreground">
+                                                Download template CSV dengan format yang benar
+                                            </p>
+                                        </div>
+                                        <Button
+                                            variant="outline"
+                                            size="sm"
+                                            onClick={() => window.open(route('admin.object-metrics.template'), '_blank')}
+                                        >
+                                            <Download className="mr-2 h-4 w-4" />
+                                            Download Template
+                                        </Button>
+                                    </div>
+
                                     <Input
                                         type="file"
                                         accept=".csv,.txt"
                                         onChange={(e) => setData('csv_file', e.target.files?.[0] || null)}
                                     />
-                                    <div className="text-muted-foreground text-sm">
-                                        <p>Format CSV yang diharapkan:</p>
-                                        <p>
-                                            ID, Nama, L2_CG1_A, L2_CG1_B, L2_CG1_C, L2_CG1_D, L2_CG1_E, L2_CG2_A,
-                                            L2_CG2_B, L2_CG2_C, L2_CG2_D, L2_CG3_A, L2_CG3_B, L2_CG3_C, L2_CG3_D,
-                                            L2_CG3_E
+
+                                    <div className="text-muted-foreground text-sm space-y-2">
+                                        <p className="font-medium">Format CSV yang diharapkan:</p>
+                                        <div className="grid grid-cols-2 gap-2 text-xs">
+                                            <div>
+                                                <p><strong>Nama Aplikasi:</strong> Nama aplikasi (wajib)</p>
+                                                <p><strong>L2_CG1_A:</strong> Ukuran File</p>
+                                                <p><strong>L2_CG1_B:</strong> Total Rating</p>
+                                                <p><strong>L2_CG1_C:</strong> User Rated</p>
+                                                <p><strong>L2_CG1_D:</strong> Total Install</p>
+                                                <p><strong>L2_CG1_E:</strong> Release Date</p>
+                                            </div>
+                                            <div>
+                                                <p><strong>L2_CG2_A:</strong> Giro</p>
+                                                <p><strong>L2_CG2_B:</strong> Tabungan</p>
+                                                <p><strong>L2_CG2_C:</strong> Deposito</p>
+                                                <p><strong>L2_CG2_D:</strong> Laba Bersih</p>
+                                                <p><strong>L2_CG3_A:</strong> Happiness</p>
+                                                <p><strong>L2_CG3_B:</strong> Engagement</p>
+                                            </div>
+                                        </div>
+                                        <div className="text-xs">
+                                            <p><strong>L2_CG3_C:</strong> Adoption</p>
+                                            <p><strong>L2_CG3_D:</strong> Retention</p>
+                                            <p><strong>L2_CG3_E:</strong> Task Success</p>
+                                        </div>
+                                        <p className="text-xs text-amber-600">
+                                            <strong>Catatan:</strong> Semua nilai numerik harus dalam format decimal dengan maksimal 4 digit setelah koma (contoh: 123456.7890). ID akan otomatis ditetapkan oleh database.
                                         </p>
                                     </div>
                                 </div>
@@ -292,17 +343,13 @@ export default function Index({ objectMetrics, filters }: Props) {
                                                 ? 'Menghapus...'
                                                 : 'Hapus'
                                             : deletingIds.includes(deleteDialogOpen || 0)
-                                              ? 'Menghapus...'
-                                              : 'Hapus'}
+                                                ? 'Menghapus...'
+                                                : 'Hapus'}
                                     </Button>
                                 </DialogFooter>
                             </DialogContent>
                         </Dialog>
 
-                        <Button onClick={handleExport} variant="outline" size="sm" disabled={isDeleting}>
-                            <Download className="mr-2 h-4 w-4" />
-                            Export
-                        </Button>
 
                         <Link href={route('admin.object-metrics.create')}>
                             <Button size="sm" disabled={isDeleting}>

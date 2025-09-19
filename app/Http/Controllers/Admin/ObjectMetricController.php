@@ -28,6 +28,7 @@ class ObjectMetricController extends Controller
         return Inertia::render('admin/object-metrics/Index', [
             'objectMetrics' => $objectMetrics,
             'filters' => $request->only(['search']),
+            'import_errors' => session('import_errors', []),
         ]);
     }
 
@@ -44,34 +45,55 @@ class ObjectMetricController extends Controller
      */
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
+        try {
+            $validated = $request->validate([
+                'name' => 'required|string|max:255',
 
-            // Level 2 Criteria Group 1
-            'l2_cg1_a' => 'required|integer',
-            'l2_cg1_b' => 'required|integer',
-            'l2_cg1_c' => 'required|integer',
-            'l2_cg1_d' => 'required|integer',
-            'l2_cg1_e' => 'required|integer',
+                // Level 2 Criteria Group 1
+                'l2_cg1_a' => 'required|numeric|min:0|max:999999999.9999',
+                'l2_cg1_b' => 'required|numeric|min:0|max:999999999.9999',
+                'l2_cg1_c' => 'required|numeric|min:0|max:999999999.9999',
+                'l2_cg1_d' => 'required|numeric|min:0|max:999999999.9999',
+                'l2_cg1_e' => 'required|numeric|min:0|max:999999999.9999',
 
-            // Level 2 Criteria Group 2
-            'l2_cg2_a' => 'required|integer',
-            'l2_cg2_b' => 'required|integer',
-            'l2_cg2_c' => 'required|integer',
-            'l2_cg2_d' => 'required|integer',
+                // Level 2 Criteria Group 2
+                'l2_cg2_a' => 'required|numeric|min:0|max:999999999.9999',
+                'l2_cg2_b' => 'required|numeric|min:0|max:999999999.9999',
+                'l2_cg2_c' => 'required|numeric|min:0|max:999999999.9999',
+                'l2_cg2_d' => 'required|numeric|min:0|max:999999999.9999',
 
-            // Level 2 Criteria Group 3
-            'l2_cg3_a' => 'required|integer',
-            'l2_cg3_b' => 'required|integer',
-            'l2_cg3_c' => 'required|integer',
-            'l2_cg3_d' => 'required|integer',
-            'l2_cg3_e' => 'required|integer',
-        ]);
+                // Level 2 Criteria Group 3
+                'l2_cg3_a' => 'required|numeric|min:0|max:999999999.9999',
+                'l2_cg3_b' => 'required|numeric|min:0|max:999999999.9999',
+                'l2_cg3_c' => 'required|numeric|min:0|max:999999999.9999',
+                'l2_cg3_d' => 'required|numeric|min:0|max:999999999.9999',
+                'l2_cg3_e' => 'required|numeric|min:0|max:999999999.9999',
+            ], [
+                'name.required' => 'Nama metrik wajib diisi.',
+                'name.string' => 'Nama metrik harus berupa teks.',
+                'name.max' => 'Nama metrik maksimal 255 karakter.',
 
-        ObjectMetric::create($validated);
+                '*.required' => 'Field ini wajib diisi.',
+                '*.numeric' => 'Field ini harus berupa angka.',
+                '*.min' => 'Nilai minimum adalah 0.',
+                '*.max' => 'Nilai maksimum adalah 999999999.9999.',
+            ]);
 
-        return redirect()->route('admin.object-metrics.index')
-            ->with('success', 'Metrik berhasil dibuat.');
+            ObjectMetric::create($validated);
+
+            return redirect()->route('admin.object-metrics.index')
+                ->with('success', 'Metrik berhasil dibuat.');
+
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return redirect()->back()
+                ->withErrors($e->errors())
+                ->withInput()
+                ->with('error', 'Terdapat kesalahan dalam data yang dimasukkan.');
+        } catch (\Exception $e) {
+            return redirect()->back()
+                ->withInput()
+                ->with('error', 'Terjadi kesalahan saat menyimpan data: ' . $e->getMessage());
+        }
     }
 
     /**
@@ -99,34 +121,55 @@ class ObjectMetricController extends Controller
      */
     public function update(Request $request, ObjectMetric $objectMetric)
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
+        try {
+            $validated = $request->validate([
+                'name' => 'required|string|max:255',
 
-            // Level 2 Criteria Group 1
-            'l2_cg1_a' => 'required|integer',
-            'l2_cg1_b' => 'required|integer',
-            'l2_cg1_c' => 'required|integer',
-            'l2_cg1_d' => 'required|integer',
-            'l2_cg1_e' => 'required|integer',
+                // Level 2 Criteria Group 1
+                'l2_cg1_a' => 'required|numeric|min:0|max:999999999.9999',
+                'l2_cg1_b' => 'required|numeric|min:0|max:999999999.9999',
+                'l2_cg1_c' => 'required|numeric|min:0|max:999999999.9999',
+                'l2_cg1_d' => 'required|numeric|min:0|max:999999999.9999',
+                'l2_cg1_e' => 'required|numeric|min:0|max:999999999.9999',
 
-            // Level 2 Criteria Group 2
-            'l2_cg2_a' => 'required|integer',
-            'l2_cg2_b' => 'required|integer',
-            'l2_cg2_c' => 'required|integer',
-            'l2_cg2_d' => 'required|integer',
+                // Level 2 Criteria Group 2
+                'l2_cg2_a' => 'required|numeric|min:0|max:999999999.9999',
+                'l2_cg2_b' => 'required|numeric|min:0|max:999999999.9999',
+                'l2_cg2_c' => 'required|numeric|min:0|max:999999999.9999',
+                'l2_cg2_d' => 'required|numeric|min:0|max:999999999.9999',
 
-            // Level 2 Criteria Group 3
-            'l2_cg3_a' => 'required|integer',
-            'l2_cg3_b' => 'required|integer',
-            'l2_cg3_c' => 'required|integer',
-            'l2_cg3_d' => 'required|integer',
-            'l2_cg3_e' => 'required|integer',
-        ]);
+                // Level 2 Criteria Group 3
+                'l2_cg3_a' => 'required|numeric|min:0|max:999999999.9999',
+                'l2_cg3_b' => 'required|numeric|min:0|max:999999999.9999',
+                'l2_cg3_c' => 'required|numeric|min:0|max:999999999.9999',
+                'l2_cg3_d' => 'required|numeric|min:0|max:999999999.9999',
+                'l2_cg3_e' => 'required|numeric|min:0|max:999999999.9999',
+            ], [
+                'name.required' => 'Nama metrik wajib diisi.',
+                'name.string' => 'Nama metrik harus berupa teks.',
+                'name.max' => 'Nama metrik maksimal 255 karakter.',
 
-        $objectMetric->update($validated);
+                '*.required' => 'Field ini wajib diisi.',
+                '*.numeric' => 'Field ini harus berupa angka.',
+                '*.min' => 'Nilai minimum adalah 0.',
+                '*.max' => 'Nilai maksimum adalah 999999999.9999.',
+            ]);
 
-        return redirect()->route('admin.object-metrics.index')
-            ->with('success', 'Metrik berhasil diperbarui.');
+            $objectMetric->update($validated);
+
+            return redirect()->route('admin.object-metrics.index')
+                ->with('success', 'Metrik berhasil diperbarui.');
+
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return redirect()->back()
+                ->withErrors($e->errors())
+                ->withInput()
+                ->with('error', 'Terdapat kesalahan dalam data yang dimasukkan.');
+        } catch (\Exception $e) {
+            return redirect()->back()
+                ->withInput()
+                ->with('error', 'Terjadi kesalahan saat memperbarui data: ' . $e->getMessage());
+        }
     }
 
     /**
@@ -175,40 +218,90 @@ class ObjectMetricController extends Controller
             $header = fgetcsv($handle);
 
             $imported = 0;
+            $errors = [];
+
             while (($data = fgetcsv($handle)) !== false) {
-                if (count($data) >= 16) { // Ensure we have enough columns
-                    ObjectMetric::create([
-                        'name' => $data[1] ?? '',
+                if (count($data) >= 15) { // Ensure we have enough columns (15 without ID)
+                    try {
+                        // Validate name field (now at index 0)
+                        $name = trim($data[0] ?? '');
+                        if (empty($name)) {
+                            throw new \Exception("Nama aplikasi tidak boleh kosong");
+                        }
 
-                        // Level 2 Criteria Group 1
-                        'l2_cg1_a' => $data[2] ? (int) $data[2] : 0,
-                        'l2_cg1_b' => $data[3] ? (int) $data[3] : 0,
-                        'l2_cg1_c' => $data[4] ? (int) $data[4] : 0,
-                        'l2_cg1_d' => $data[5] ? (int) $data[5] : 0,
-                        'l2_cg1_e' => $data[6] ? (int) $data[6] : 0,
+                        // Validate and convert numeric values with proper field mapping (shifted by 1 index)
+                        $fieldMapping = [
+                            'l2_cg1_a' => ['value' => $data[1] ?? 0, 'label' => 'Ukuran File'],
+                            'l2_cg1_b' => ['value' => $data[2] ?? 0, 'label' => 'Total Rating'],
+                            'l2_cg1_c' => ['value' => $data[3] ?? 0, 'label' => 'User Rated'],
+                            'l2_cg1_d' => ['value' => $data[4] ?? 0, 'label' => 'Total Install'],
+                            'l2_cg1_e' => ['value' => $data[5] ?? 0, 'label' => 'Release Date'],
+                            'l2_cg2_a' => ['value' => $data[6] ?? 0, 'label' => 'Giro'],
+                            'l2_cg2_b' => ['value' => $data[7] ?? 0, 'label' => 'Tabungan'],
+                            'l2_cg2_c' => ['value' => $data[8] ?? 0, 'label' => 'Deposito'],
+                            'l2_cg2_d' => ['value' => $data[9] ?? 0, 'label' => 'Laba Bersih'],
+                            'l2_cg3_a' => ['value' => $data[10] ?? 0, 'label' => 'Happiness'],
+                            'l2_cg3_b' => ['value' => $data[11] ?? 0, 'label' => 'Engagement'],
+                            'l2_cg3_c' => ['value' => $data[12] ?? 0, 'label' => 'Adoption'],
+                            'l2_cg3_d' => ['value' => $data[13] ?? 0, 'label' => 'Retention'],
+                            'l2_cg3_e' => ['value' => $data[14] ?? 0, 'label' => 'Task Success'],
+                        ];
 
-                        // Level 2 Criteria Group 2
-                        'l2_cg2_a' => $data[7] ? (int) $data[7] : 0,
-                        'l2_cg2_b' => $data[8] ? (int) $data[8] : 0,
-                        'l2_cg2_c' => $data[9] ? (int) $data[9] : 0,
-                        'l2_cg2_d' => $data[10] ? (int) $data[10] : 0,
+                        $validatedFields = [];
+                        foreach ($fieldMapping as $field => $fieldData) {
+                            $value = trim($fieldData['value']);
 
-                        // Level 2 Criteria Group 3
-                        'l2_cg3_a' => $data[11] ? (int) $data[11] : 0,
-                        'l2_cg3_b' => $data[12] ? (int) $data[12] : 0,
-                        'l2_cg3_c' => $data[13] ? (int) $data[13] : 0,
-                        'l2_cg3_d' => $data[14] ? (int) $data[14] : 0,
-                        'l2_cg3_e' => $data[15] ? (int) $data[15] : 0,
-                    ]);
-                    $imported++;
+                            // Skip empty values (set to 0)
+                            if (empty($value)) {
+                                $validatedFields[$field] = 0;
+                                continue;
+                            }
+
+                            // Validate numeric format
+                            if (!is_numeric($value)) {
+                                throw new \Exception("{$fieldData['label']} harus berupa angka: {$value}");
+                            }
+
+                            $decimalValue = (float) $value;
+
+                            // Validate range
+                            if ($decimalValue < 0) {
+                                throw new \Exception("{$fieldData['label']} tidak boleh negatif: {$value}");
+                            }
+
+                            if ($decimalValue > 999999999.9999) {
+                                throw new \Exception("{$fieldData['label']} melebihi batas maksimum (999999999.9999): {$value}");
+                            }
+
+                            $validatedFields[$field] = $decimalValue;
+                        }
+
+                        // Create the record
+                        ObjectMetric::create([
+                            'name' => $name,
+                            ...$validatedFields
+                        ]);
+                        $imported++;
+
+                    } catch (\Exception $e) {
+                        $errors[] = "Baris " . ($imported + 1) . ": " . $e->getMessage();
+                    }
+                } else {
+                    $errors[] = "Baris " . ($imported + 1) . ": Data tidak lengkap (minimal 15 kolom)";
                 }
             }
 
             fclose($handle);
             DB::commit();
 
+            $message = "Berhasil mengimpor {$imported} data metrik.";
+            if (!empty($errors)) {
+                $message .= " Terdapat " . count($errors) . " baris dengan kesalahan.";
+            }
+
             return redirect()->route('admin.object-metrics.index')
-                ->with('success', "Berhasil mengimpor {$imported} data metrik.");
+                ->with('success', $message)
+                ->with('import_errors', $errors);
 
         } catch (\Exception $e) {
             DB::rollBack();
@@ -218,67 +311,62 @@ class ObjectMetricController extends Controller
     }
 
     /**
-     * Export object metrics to CSV
+     * Download sample import template
      */
-    public function export()
+    public function downloadTemplate()
     {
-        $objectMetrics = ObjectMetric::all();
-
-        $filename = 'object_metrics_' . date('Y-m-d_H-i-s') . '.csv';
+        $filename = 'object_metrics_template_' . date('Y-m-d') . '.csv';
 
         $headers = [
             'Content-Type' => 'text/csv',
             'Content-Disposition' => 'attachment; filename="' . $filename . '"',
         ];
 
-        $callback = function () use ($objectMetrics) {
+        $callback = function () {
             $file = fopen('php://output', 'w');
 
-            // Header row
+            // Header row with descriptions (without ID)
             fputcsv($file, [
-                'ID',
-                'Nama',
-                'L2_CG1_A',
-                'L2_CG1_B',
-                'L2_CG1_C',
-                'L2_CG1_D',
-                'L2_CG1_E',
-                'L2_CG2_A',
-                'L2_CG2_B',
-                'L2_CG2_C',
-                'L2_CG2_D',
-                'L2_CG3_A',
-                'L2_CG3_B',
-                'L2_CG3_C',
-                'L2_CG3_D',
-                'L2_CG3_E'
+                'Nama Aplikasi',
+                'L2_CG1_A (Ukuran File)',
+                'L2_CG1_B (Total Rating)',
+                'L2_CG1_C (User Rated)',
+                'L2_CG1_D (Total Install)',
+                'L2_CG1_E (Release Date)',
+                'L2_CG2_A (Giro)',
+                'L2_CG2_B (Tabungan)',
+                'L2_CG2_C (Deposito)',
+                'L2_CG2_D (Laba Bersih)',
+                'L2_CG3_A (Happiness)',
+                'L2_CG3_B (Engagement)',
+                'L2_CG3_C (Adoption)',
+                'L2_CG3_D (Retention)',
+                'L2_CG3_E (Task Success)'
             ]);
 
-            // Data rows
-            foreach ($objectMetrics as $metric) {
-                fputcsv($file, [
-                    $metric->id,
-                    $metric->name,
-                    $metric->l2_cg1_a,
-                    $metric->l2_cg1_b,
-                    $metric->l2_cg1_c,
-                    $metric->l2_cg1_d,
-                    $metric->l2_cg1_e,
-                    $metric->l2_cg2_a,
-                    $metric->l2_cg2_b,
-                    $metric->l2_cg2_c,
-                    $metric->l2_cg2_d,
-                    $metric->l2_cg3_a,
-                    $metric->l2_cg3_b,
-                    $metric->l2_cg3_c,
-                    $metric->l2_cg3_d,
-                    $metric->l2_cg3_e,
-                ]);
-            }
+            // Sample data row (without ID)
+            fputcsv($file, [
+                'Sample App',
+                '123456.7890',
+                '4.5000',
+                '1000.0000',
+                '50000.0000',
+                '2024.0101',
+                '1000000.0000',
+                '2000000.0000',
+                '500000.0000',
+                '150000.0000',
+                '85.5000',
+                '90.2500',
+                '75.7500',
+                '88.0000',
+                '92.5000'
+            ]);
 
             fclose($file);
         };
 
         return response()->stream($callback, 200, $headers);
     }
+
 }
